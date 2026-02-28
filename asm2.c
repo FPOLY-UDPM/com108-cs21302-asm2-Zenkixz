@@ -21,6 +21,7 @@
 // Viết chương trình C thực hiện các chức năng trên
 
 #include <stdio.h>
+#include <math.h>
 void chucNNangTimSoNguyen() {
     float so;
     printf("Nhap mot so: ");    
@@ -30,6 +31,7 @@ void chucNNangTimSoNguyen() {
     } else {
         printf("%.2f khong phai la so nguyen.\n", so);
     }
+
 }
 void chucNangTimUocSoChungVaBoiSoChung() {
     int a, b;
@@ -48,57 +50,136 @@ void chucNangTimUocSoChungVaBoiSoChung() {
     printf("Uoc so chung lon nhat cua %d va %d la: %d\n", a, b, uscln);
     printf("Boi so chung nho nhat cua %d va %d la: %d\n", a, b, bscnn);
 }
+// Gọi hàm void để xử lý chức năng tính tiền cho quán Karaoke
     void chucNangTinhTienquanKaraoke() { 
     int gioBatDau, gioKetThuc;
-    printf("Nhap gio bat dau (0-23): ");
-    scanf("%d", &gioBatDau);    
-    printf("Nhap gio ket thuc (0-23): ");
+    float tienThanhToan;
+    int tongsogio;
+        printf("Nhap gio bat dau (12-23): ");
+    scanf("%d", &gioBatDau);
+    printf("Nhap gio ket thuc (12-23): ");
     scanf("%d", &gioKetThuc);
-    if (gioKetThuc < gioBatDau || gioBatDau < 0 || gioBatDau > 23 || gioKetThuc < 0 || gioKetThuc > 23) {
-        printf("Gio khong hop le.\n");
+    // Kiểm tra hợp lệ
+    if (gioBatDau < 12 || gioBatDau > 23 || gioKetThuc < 12 || gioKetThuc > 23 || gioKetThuc <= gioBatDau) {
+        printf("Thoi gian khong hop le!\n");
         return;
-    } 
-    int tongGio = gioKetThuc - gioBatDau;
-    int tienThanhToan = 0;
-    if (tongGio <= 2) {
-        tienThanhToan = tongGio * 20000;
-    } else {
-        tienThanhToan = 2 * 20000 + (tongGio - 2) * 15000;
     }
-    printf("Tong tien phai thanh toan: %d VND\n", tienThanhToan);
-}
-void chucNangTinhTienDien() {
-    int soDien;
-    printf("Nhap so dien tieu thu: ");
-    scanf("%d", &soDien);
-    int tienDien = 0;
-    if (soDien <= 50) {
-        tienDien = soDien * 1000;
-    } else if (soDien <= 100) {
-        tienDien = 50 * 1000 + (soDien - 50) * 1200;
+
+    tongsogio = gioKetThuc - gioBatDau;
+
+    // Tính tiền
+    if (tongsogio <= 3) {
+        tienThanhToan = tongsogio * 150000;
     } else {
-        tienDien = 50 * 1000 + 50 * 1200 + (soDien - 100) * 1500;
-    }           
-    printf("Tien dien phai tra: %d VND\n", tienDien);   
-}
-void chucNangDoiTien() {
-    int soTien;
-    printf("Nhap so tien can doi: ");
-    scanf("%d", &soTien);
-    int soTienDoiDuoc = soTien / 23000; // Gia tien USD/VND
-    printf("So tien doi duoc: %d USD\n", soTienDoiDuoc);
+        tienThanhToan = 3 * 150000 + (tongsogio - 3) * 150000 * 0.7; // giảm 30% từ giờ thứ 4
+    }
+
+    // Giảm thêm 10% nếu giờ bắt đầu trong khoảng 14-17
+    if (gioBatDau >= 14 && gioBatDau <= 17) {
+        tienThanhToan = tienThanhToan * 0.9;
+    }
+
+    printf("Tong so gio: %d\n", tongsogio);
+    printf("So tien can thanh toan: %.0f VND\n", tienThanhToan);
 }   
-void chucNangTinhLaiSuatVayNganHangVayTraGop() {
-    float soTienVay, laiSuat, thoiGianVay;  
-    printf("Nhap so tien vay: ");   
-    scanf("%f", &soTienVay);    
-    printf("Nhap lai suat nam (%%): "); 
-    scanf("%f", &laiSuat);
-    printf("Nhap thoi gian vay (nam): ");   
-    scanf("%f", &thoiGianVay);  
-    float tongTienTra = soTienVay * (1 + (laiSuat / 100) * thoiGianVay);    
-    printf("Tong tien phai tra sau %.2f nam: %.2f VND\n", thoiGianVay, tongTienTra);    
+void chucNangTinhTienDien() {
+    // Khai báo biến
+    int kWh;
+
+    // Nhập dữ liệu
+    printf("Nhap so dien tieu thu hang thang: ");
+    scanf("%d", &kWh);      
+     if (kWh <= 50) {
+        float tien = kWh * 1.678;
+        printf("So tien phai dong: %.2f VND\n", tien);
+    } else if (kWh <= 100) {
+        float tien = 50 * 1.678 + (kWh - 50) * 1.734;
+        printf("So tien phai dong: %.2f VND\n", tien);
+    } else if (kWh > 100) {
+        float tien = 50 * 1.678 + 50 * 1.734 + (kWh - 100) * 2.014;
+        printf("So tien phai dong: %.2f VND\n", tien);
+    } else if (kWh > 200) {
+        float tien = 50 * 1.678 + 50 * 1.734 + 100 * 2.014 + (kWh - 200) * 2.536;
+        printf("So tien phai dong: %.2f VND\n", tien);
+    } else if (kWh > 300) {
+        float tien = 50 * 1.678 + 50 * 1.734 + 100 * 2.014 + 100 * 2.536 + (kWh - 300) * 2.834;
+        printf("So tien phai dong: %.2f VND\n", tien);
+    } else if (kWh > 400) {
+        float tien = 50 * 1.678 + 50 * 1.734 + 100 * 2.014 + 100 * 2.536 + 100 * 2.834 + (kWh - 400) * 2.927;
+        printf("So tien phai dong: %.2f VND\n", tien);
+    } else {
+        printf("So dien tieu thu khong hop le.\n");
+    }       
+
+    // Xử lý, tính toán VÀ Hiển thị kết quả           
+}   
+void chucnangdoitien(int money) {
+    int nhungmenhgia[] = {500, 200, 100, 50, 20, 10, 5, 2, 1};
+    int n = sizeof(nhungmenhgia) / sizeof(nhungmenhgia[0]);
+printf("Nhap so tien can doi: "); 
+scanf("%d", &money);
+    printf("Ket qua doi tien cho so tien %d:\n", money);
+    for (int i = 0; i < n; i++) {
+        int count = money / nhungmenhgia[i];
+        if (count > 0) {
+            printf("%d to %d\n", count, nhungmenhgia[i]);
+            money %= nhungmenhgia[i];
+        }
+    }
 }
+
+void chucnangtinhlaisuatvaynganhangvaytragop(int tienVay) {
+    int tienVay;
+    printf("Nhap so tien muon vay: ");
+    scanf("%d", &tienVay);
+
+    chucnangtinhlaisuatvaynganhangvaytragop(tienVay);
+    
+    float laiSuat = 0.05; // 5%/tháng
+    int kyHan = 12;       // 12 tháng
+    int gocPhaiTra = tienVay / kyHan;
+    int soTienConLai = tienVay;
+
+    printf("Bang tinh lai suat vay ngan hang tra gop:\n");
+    printf("Ky han | Lai phai tra | Goc phai tra | So tien phai tra | So tien con lai\n");
+    printf("--------------------------------------------------------------------------\n");
+
+    for (int thang = 1; thang <= kyHan; thang++) {
+        int laiPhaiTra = (int)(soTienConLai * laiSuat);
+        int soTienPhaiTra = gocPhaiTra + laiPhaiTra;
+        soTienConLai -= gocPhaiTra;
+
+        printf("%2d     | %10d   | %11d   | %15d   | %14d\n",
+               thang, laiPhaiTra, gocPhaiTra, soTienPhaiTra, soTienConLai);
+    }
+}
+
+void chucnangvaytienmuaxe(int phanTramVay) {
+     int phanTramVay;
+    printf("Nhap phan tram vay toi da (vd: 80): ");
+    scanf("%d", &phanTramVay);
+    chucnangvaytienmuaxe(phanTramVay);
+    float giaXe = 500000000.0f; // 500 triệu
+    int thoiHanNam = 24;
+    int thoiHanThang = thoiHanNam * 12;
+    float laiSuatNam = 0.072f;
+    float laiSuatThang = laiSuatNam / 12;
+
+    // Tính số tiền vay và trả trước
+    float soTienVay = giaXe * phanTramVay / 100.0f;
+    float traTruoc = giaXe - soTienVay;
+
+    // Công thức tính trả góp hàng tháng (annuity formula)
+    float tienTraHangThang = soTienVay * laiSuatThang / (1 - powf(1 + laiSuatThang, -thoiHanThang));
+
+    printf("Gia xe: %.0f VND\n", giaXe);
+    printf("Tra truoc: %.0f VND\n", traTruoc);
+    printf("So tien vay: %.0f VND\n", soTienVay);
+    printf("Thoi han vay: %d nam (%d thang)\n", thoiHanNam, thoiHanThang);
+    printf("Lai suat co dinh: %.2f%%/nam\n", laiSuatNam * 100);
+    printf("So tien phai tra hang thang: %.0f VND\n", tienTraHangThang);
+}
+
 void chucNangSapXepThongTinSinhVien() {
     // Chức năng này sẽ được hoàn thiện sau
 }   
